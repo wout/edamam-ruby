@@ -57,7 +57,7 @@ module Edamam
       def encode_path_params(path, params)
         encoded_path = URI.encode_www_form(params)
         unescaped_encoded_path = [path, encoded_path].join("?").tr("+", " ")
-        URI.escape(unescaped_encoded_path)
+        URI::DEFAULT_PARSER.escape(unescaped_encoded_path)
       end
 
       def set_headers(headers)

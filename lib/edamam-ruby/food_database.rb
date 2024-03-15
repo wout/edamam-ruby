@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Edamam
   class FoodDatabase
     attr_reader :client
+
     def initialize(client)
       @client = client
     end
@@ -17,9 +20,9 @@ module Edamam
     private
 
     def process_response(status, body)
-      if status
-        Response::TotalNutrients.new(total_nutrients: body["totalNutrients"])
-      end
+      return unless status
+
+      Response::TotalNutrients.new(total_nutrients: body['totalNutrients'])
     end
   end
 end

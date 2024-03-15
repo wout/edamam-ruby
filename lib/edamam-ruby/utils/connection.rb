@@ -1,22 +1,23 @@
+# frozen_string_literal: true
+
 module Edamam
   module Utils
     class Connection
-
       VERB_MAP = {
         get: Net::HTTP::Get,
-        post: Net::HTTP::Post,
+        post: Net::HTTP::Post
       }.freeze
 
       ERROR_MAP = {
-        "401" => [UnauthorizedError, "Invalid App Id or App key"],
-        "422" => [
+        '401' => [UnauthorizedError, 'Invalid App Id or App key'],
+        '422' => [
           UnprocessableEntityError,
-          "Couldn’t parse the recipe or extract the nutritional info",
+          'Couldn’t parse the recipe or extract the nutritional info'
         ],
-        "555" => [
+        '555' => [
           InsufficientQualityError,
-          "Recipe with insufficient quality to process correctly",
-        ],
+          'Recipe with insufficient quality to process correctly'
+        ]
       }.freeze
 
       def initialize
@@ -25,7 +26,7 @@ module Edamam
         @http.use_ssl = true
       end
 
-      VERB_MAP.keys.each do |method_name|
+      VERB_MAP.each_key do |method_name|
         define_method(method_name) do |path, params, header = {}|
           process_request(method_name, path, params, header)
         end
@@ -42,7 +43,8 @@ module Edamam
       end
 
       def raise_error_or_parse_body(code, body)
-        raise ERROR_MAP[code][0], ERROR_MAP[code][1] unless code == "200"
+        raise ERROR_MAP[code][0], ERROR_MAP[code][1] unless code == '200'
+
         [code, JSON.parse(body)]
       end
 
@@ -50,21 +52,21 @@ module Edamam
         path = method == :get ? encode_path_params(path, params) : path
         request = VERB_MAP[method.to_sym].new(path)
         request.set_form_data(params) if method == :post
-        set_headers(headers)
+        headers(headers)
         @http.request(request)
       end
 
       def encode_path_params(path, params)
         encoded_path = URI.encode_www_form(params)
-        unescaped_encoded_path = [path, encoded_path].join("?").tr("+", " ")
+        unescaped_encoded_path = [path, encoded_path].join('?').tr('+', ' ')
         URI::DEFAULT_PARSER.escape(unescaped_encoded_path)
       end
 
-      def set_headers(headers)
-        unless headers.empty?
-          headers.each do |key, value|
-            request.add_field(key.to_s, value)
-          end
+      def headers(headers)
+        return if headers.empty?
+
+        headers.each do |key, value|
+          request.add_field(key.to_s, value)
         end
       end
     end

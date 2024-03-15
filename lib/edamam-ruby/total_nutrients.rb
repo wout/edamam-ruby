@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Edamam
   module Response
     class TotalNutrients
@@ -5,7 +7,7 @@ module Edamam
         @total_nutrients = total_nutrients
       end
 
-      NUTRIENT_KEYS = ["sugar", "na", "fat", "enerc_kcal"].freeze
+      NUTRIENT_KEYS = %w[sugar na fat enerc_kcal].freeze
 
       NUTRIENT_KEYS.each do |nutrient|
         define_method(nutrient) do
@@ -13,8 +15,8 @@ module Edamam
         end
       end
 
-      alias_method :sodium, :na
-      alias_method :kilocalories, :enerc_kcal
+      alias sodium na
+      alias kilocalories enerc_kcal
 
       private
 

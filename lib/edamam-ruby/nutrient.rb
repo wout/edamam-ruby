@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Edamam
   class Nutrient
     attr_accessor :label, :quantity, :unit
@@ -7,6 +9,5 @@ module Edamam
         send("#{key}=", value)
       end
     end
-
   end
 end

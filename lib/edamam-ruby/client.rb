@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Edamam
   class Client
     attr_accessor :app_key, :app_id, :food_database
+
     def initialize(**args)
       args.each_pair do |attribute, value|
         instance_variable_set("@#{attribute}", value)
@@ -13,7 +16,7 @@ module Edamam
     private
 
     def raise_error_if_keys_not_present
-      raise Utils::MissingKeyError, "Missing Api key or App Id"
+      raise Utils::MissingKeyError, 'Missing Api key or App Id'
     end
   end
 end
